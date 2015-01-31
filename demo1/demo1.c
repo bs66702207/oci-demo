@@ -35,7 +35,7 @@ int main()
 
 	p_sli = (char *)malloc(20);
 	memset(p_sli, 0, 20);
-	
+
 	/*创建oci环境句柄*/
 	rc = OCIEnvCreate((OCIEnv **) &p_env, OCI_DEFAULT,(dvoid *)0,
 			(dvoid * (*)(dvoid *, size_t)) 0,
