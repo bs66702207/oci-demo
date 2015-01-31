@@ -23,9 +23,6 @@ static OCIBind		*p_bnd = (OCIBind *) 0;//oci绑定句柄
 
 int main()
 {
-	OCIDefine    *p_dfn = (OCIDefine *) 0;//oci输出变量
-	OCIBind      *p_bnd = (OCIBind *) 0;//oci绑定句柄
-
 	int		p_bvi;//employee_id = p_bvi
 	char	*p_sli;//存储SQL查询语句后的结果
 	int 	rc;	//接收OCI-api返回值
