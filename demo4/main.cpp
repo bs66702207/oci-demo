@@ -198,113 +198,81 @@ int main()
 		throw NstvException();
 	WUJDEBUG("oci绑定语句占位符2: OCIBindByName()\n");
 
-	rc = OCIBindByName(p_stmt2, &p_bnd3, p_err, (text *)":name", strlen(":name"), 
+	if (!NstvException::checkErr(p_err, OCIBindByName(p_stmt2, &p_bnd3, p_err, (text *)":name", strlen(":name"), 
 			(dvoid *)p_name, strlen(p_name)+1, SQLT_STR, (dvoid *)0,           
-			(ub2 *)0, (ub2 *)0, (ub4)0, (ub4 *)0, OCI_DEFAULT);
-	WUJDEBUG("oci绑定语句占位符3: OCIBindByName()rc=%d\n", rc);
-	if(rc != 0)
-    {
-        printOCIErr(p_err, "OCIBindByName", rc);
-        goto OCIErr;
-    }
-	
+			(ub2 *)0, (ub2 *)0, (ub4)0, (ub4 *)0, OCI_DEFAULT)))
+		throw NstvException();
+	WUJDEBUG("oci绑定语句占位符3: OCIBindByName()\n");	
 	
 	/*准备语句执行结果缓冲区*/
-	rc = OCIDefineByPos(p_stmt1, &p_dfn1, p_err, 1, (dvoid *)res_id, sizeof(int), SQLT_INT, 
-			(dvoid *)0, (ub2 *)0, (ub2 *)0, OCI_DEFAULT);
-	WUJDEBUG("oci定义结果缓冲区1: OCIDefineByPos()rc=%d\n", rc);
-	if(rc != 0)
-    {
-        printOCIErr(p_err, "OCIDefineByPos", rc);
-        goto OCIErr;
-    }
-	rc = OCIDefineByPos(p_stmt1, &p_dfn2, p_err, 2, (dvoid *)res_name, (sword)20, SQLT_STR, 
-			(dvoid *)0, (ub2 *)0, (ub2 *)0, OCI_DEFAULT);
-	WUJDEBUG("oci定义结果缓冲区2: OCIDefineByPos()rc=%d\n", rc);
-	if(rc != 0)
-    {
-        printOCIErr(p_err, "OCIDefineByPos", rc);
-        goto OCIErr;
-    }
+	if (!NstvException::checkErr(p_err, OCIDefineByPos(p_stmt1, &p_dfn1, p_err, 1, (dvoid *)res_id, sizeof(int), SQLT_INT, 
+			(dvoid *)0, (ub2 *)0, (ub2 *)0, OCI_DEFAULT)))
+		throw NstvException();
+	WUJDEBUG("oci定义结果缓冲区1: OCIDefineByPos()\n");
+	if (!NstvException::checkErr(p_err, OCIDefineByPos(p_stmt1, &p_dfn2, p_err, 2, (dvoid *)res_name, (sword)20, SQLT_STR, 
+			(dvoid *)0, (ub2 *)0, (ub2 *)0, OCI_DEFAULT)))
+		throw NstvException();
+	WUJDEBUG("oci定义结果缓冲区2: OCIDefineByPos()\n");
 	
 	/*获得SQL语句的类型, 判断会话执行的SQL语句是什么类型的 OCI_STMT_XXX, 如 OCI_STMT_SELECT、OCI_STMT_UPDATE、OCI_STMT_DROP等*/
-	rc = OCIAttrGet ((dvoid *)p_stmt1, (ub4)OCI_HTYPE_STMT, (dvoid *)&stmt_type1, (ub4 *)0, (ub4)OCI_ATTR_STMT_TYPE, p_err);
-	WUJDEBUG("oci获得SQL语句的类型1: OCIAttrGet()rc=%d, 类型为: p_stmt1=%d\n", rc, stmt_type1);
-	if(rc != 0)
-    {
-        printOCIErr(p_err, "OCIAttrGet1", rc);
-        goto OCIErr;
-    }
-	rc = OCIAttrGet ((dvoid *)p_stmt2, (ub4)OCI_HTYPE_STMT, (dvoid *)&stmt_type2, (ub4 *)0, (ub4)OCI_ATTR_STMT_TYPE, p_err);
-	WUJDEBUG("oci获得SQL语句的类型2: OCIAttrGet()rc=%d, 类型为: p_stmt2=%d\n", rc, stmt_type2);
-	if(rc != 0)
-    {
-        printOCIErr(p_err, "OCIAttrGet2", rc);
-        goto OCIErr;
-    }
-	rc = OCIAttrGet ((dvoid *)p_stmt3, (ub4)OCI_HTYPE_STMT, (dvoid *)&stmt_type3, (ub4 *)0, (ub4)OCI_ATTR_STMT_TYPE, p_err);
-	WUJDEBUG("oci获得SQL语句的类型3: OCIAttrGet()rc=%d, 类型为: p_stmt3=%d\n", rc, stmt_type3);
-	if(rc != 0)
-    {
-        printOCIErr(p_err, "OCIAttrGet2", rc);
-        goto OCIErr;
-    }
+	if (!NstvException::checkErr(p_err, OCIAttrGet ((dvoid *)p_stmt1, (ub4)OCI_HTYPE_STMT, (dvoid *)&stmt_type1, 
+		(ub4 *)0, (ub4)OCI_ATTR_STMT_TYPE, p_err)))
+		throw NstvException();
+	WUJDEBUG("oci获得SQL语句的类型1: OCIAttrGet() 类型为: p_stmt1=%d\n", stmt_type1);
+
+	if (!NstvException::checkErr(p_err, OCIAttrGet ((dvoid *)p_stmt2, (ub4)OCI_HTYPE_STMT, (dvoid *)&stmt_type2, 
+		(ub4 *)0, (ub4)OCI_ATTR_STMT_TYPE, p_err)))
+		throw NstvException();
+	WUJDEBUG("oci获得SQL语句的类型2: OCIAttrGet() 类型为: p_stmt2=%d\n", stmt_type2);
+	
+	if (!NstvException::checkErr(p_err, OCIAttrGet ((dvoid *)p_stmt3, (ub4)OCI_HTYPE_STMT, (dvoid *)&stmt_type3, 
+		(ub4 *)0, (ub4)OCI_ATTR_STMT_TYPE, p_err)))
+		throw NstvException();
+	WUJDEBUG("oci获得SQL语句的类型3: OCIAttrGet() 类型为: p_stmt3=%d\n", stmt_type3);
 	
 	/*执行SQL语句*/
 #if 1
 
-	
 	rc = OCIHandleAlloc((dvoid *)p_env, (dvoid **)&p_trans, OCI_HTYPE_TRANS, 0, 0);
 	WUJDEBUG("oci创建事务句柄: OCIHandleAlloc()rc=%d\n", rc);
 	if(rc != 0){
 		printOCIErr(p_err, "OCIHandleAlloc", rc);
 		goto OCIErr;
 	}
-	rc = OCIAttrSet((dvoid *)p_svc, OCI_HTYPE_SVCCTX, (dvoid *)p_trans, 0, OCI_ATTR_TRANS, p_err);
-	WUJDEBUG("oci设置事务句柄属性: OCIHandleAlloc()rc=%d\n", rc);
-	if(rc != 0){
-		printOCIErr(p_err, "OCIAttrSet", rc);
-		goto OCIErr;
-	}
+	if (!NstvException::checkErr(p_err, OCIAttrSet((dvoid *)p_svc, OCI_HTYPE_SVCCTX, (dvoid *)p_trans, 0, OCI_ATTR_TRANS, p_err)))
+		throw NstvException();
+	WUJDEBUG("oci设置事务句柄属性: OCIHandleAlloc()\n");
 
-	rc = OCITransStart (p_svc, p_err, 3, OCI_TRANS_NEW);
-	WUJDEBUG("oci开启一个事务: OCITransStart()rc=%d\n", rc);
-	if(rc != 0)
-	{
-        printOCIErr(p_err, "OCITransStart", rc);
-        goto OCIErr;
-    }else if(stmt_type2 == OCI_STMT_INSERT){
-		rc = OCIStmtExecute(p_svc, p_stmt2, p_err, (ub4)1, (ub4)0, (CONST OCISnapshot *)NULL, (OCISnapshot *)NULL, OCI_DEFAULT);	
-		WUJDEBUG("oci执行SQL语句2: OCIStmtExecute()rc=%d\n", rc);
-		if(rc != 0)
-		{
-			printOCIErr(p_err, "OCIStmtExecute", rc);
-			OCITransRollback(p_svc, p_err, (ub4) 0);
-			goto OCIErr;
-		}else
-			OCITransCommit(p_svc, p_err, (ub4) 0);
+	if (!NstvException::checkErr(p_err, OCITransStart (p_svc, p_err, 3, OCI_TRANS_NEW))){
+		throw NstvException();
+	}
+    else if(stmt_type2 == OCI_STMT_INSERT){
+		WUJDEBUG("oci开启一个事务: OCITransStart()\n");
+		WUJDEBUG("oci执行SQL语句2: OCIStmtExecute()\n");
+		if (!NstvException::checkErr(p_err, OCIStmtExecute(p_svc, p_stmt2, p_err, 
+			(ub4)1, (ub4)0, (CONST OCISnapshot *)NULL, (OCISnapshot *)NULL, OCI_DEFAULT))){
+			NstvException::checkErr(p_err, OCITransRollback(p_svc, p_err, (ub4) 0));
+			throw NstvException();
+		}else{//如果没有发生异常，则else中将事务提交
+			WUJDEBUG("oci提交一个事务: OCITransStart()\n");
+			NstvException::checkErr(p_err, OCITransCommit(p_svc, p_err, (ub4) 0));
+		}
 	}
 	
 #endif
 #if 0
 	if(stmt_type3 == OCI_STMT_DELETE){
-		rc = OCIStmtExecute(p_svc, p_stmt3, p_err, (ub4)1, (ub4)0, (CONST OCISnapshot *)NULL, (OCISnapshot *)NULL, OCI_DEFAULT);	
-		WUJDEBUG("oci执行SQL语句3: OCIStmtExecute()rc=%d\n", rc);
-		if(rc != 0)
-		{
-			printOCIErr(p_err, "OCIStmtExecute", rc);
-			goto OCIErr;
-		}
+		if (!NstvException::checkErr(p_err, OCIStmtExecute(p_svc, p_stmt3, p_err, (ub4)1, (ub4)0, 
+			(CONST OCISnapshot *)NULL, (OCISnapshot *)NULL, OCI_DEFAULT)))
+			throw NstvException();
+		WUJDEBUG("oci执行SQL语句3: OCIStmtExecute()\n");
 	}
 #endif	
 	if(stmt_type1 == OCI_STMT_SELECT){
-		rc = OCIStmtExecute(p_svc, p_stmt1, p_err, (ub4)1, (ub4)0, (CONST OCISnapshot *)NULL, (OCISnapshot *)NULL, OCI_DEFAULT);	
-		WUJDEBUG("oci执行SQL语句1: OCIStmtExecute()rc=%d\n", rc);
-		if(rc != 0)
-		{
-			printOCIErr(p_err, "OCIStmtExecute", rc);
-			goto OCIErr;
-		}
+		if (!NstvException::checkErr(p_err, OCIStmtExecute(p_svc, p_stmt1, p_err, (ub4)1, (ub4)0, 
+			(CONST OCISnapshot *)NULL, (OCISnapshot *)NULL, OCI_DEFAULT)))
+			throw NstvException();
+		WUJDEBUG("oci执行SQL语句1: OCIStmtExecute()\n");
 	}
 	
 	
@@ -315,21 +283,20 @@ int main()
 		rc = OCIStmtFetch2(p_stmt1, p_err, 1, OCI_FETCH_NEXT, 1, OCI_DEFAULT);
 		if(rc != 100 && rc !=0)
 		{
-			//printOCIErr(p_err, "OCIStmtFetch2", rc);
+			printOCIErr(p_err, "OCIStmtFetch2", rc);
 		}
-	}	
+	}
+	rc = 0;
 	
 	/*断开连接*/
-	rc = OCILogoff(p_svc, p_err); 
-	WUJDEBUG("oci断开连接: CILogoff()rc=%d\n", rc);
-	if(rc != 0){
-		goto OCIErr;
-	}
-	OCIServerDetach(p_server, p_err, OCI_DEFAULT);
-	WUJDEBUG("oci删除对数据源的访问: CILogoff()rc=%d\n", rc);
-	if(rc != 0){
-		goto OCIErr;
-	}
+
+	if (!NstvException::checkErr(p_err, OCISessionEnd(p_svc, p_err, p_session, (ub4)OCI_DEFAULT)))
+		throw NstvException();
+	printf("oci结束会话: CILogoff()\n");
+	
+	if (!NstvException::checkErr(p_err, OCIServerDetach(p_server, p_err, OCI_DEFAULT)))
+		throw NstvException();
+	printf("oci删除对数据源的访问: CILogoff()\n");
 	
 OCIErr:
 	if(p_env != NULL){
