@@ -362,12 +362,17 @@ int main()
 	}	
 	
 	/*断开连接*/
-	rc = OCILogoff(p_svc, p_err); 
-	printf("oci断开连接: CILogoff()rc=%d\n", rc);
+	//rc = OCILogoff(p_svc, p_err); 
+	//printf("oci断开连接: CILogoff()rc=%d\n", rc);
+	//if(rc != 0){
+	//	goto OCIErr;
+	//}
+	rc = OCISessionEnd(p_svc, p_err, p_session, (ub4)OCI_DEFAULT);
 	if(rc != 0){
 		goto OCIErr;
 	}
-	OCIServerDetach(p_server, p_err, OCI_DEFAULT);
+	printf("oci结束会话: CILogoff()rc=%d\n", rc);
+	rc = OCIServerDetach(p_server, p_err, OCI_DEFAULT);
 	printf("oci删除对数据源的访问: CILogoff()rc=%d\n", rc);
 	if(rc != 0){
 		goto OCIErr;
