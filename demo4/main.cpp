@@ -91,7 +91,7 @@ int main()
 	memset(res_name, 0, 20);
 
 	/*创建oci环境句柄*/
-	rc = OCIEnvCreate((OCIEnv **)&p_env, OCI_DEFAULT,(dvoid *)0,
+	rc = OCIEnvCreate((OCIEnv **)&p_env, OCI_THREADED|OCI_OBJECT,(dvoid *)0,
 			(dvoid * (*)(dvoid *, size_t))0,
 			(dvoid * (*)(dvoid *, dvoid *, size_t))0,
 			(void (*)(dvoid *, dvoid *))0,
