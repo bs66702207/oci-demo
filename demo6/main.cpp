@@ -4,11 +4,7 @@
   Author      : wuj 
   Version     : the second demo for oci programme
   Copyright   : nstv
-  Description : connnect oracle for dbuser1/1@orcl
-				start transaction
-				exec sql1 select employee_id, first_name from employees where employee_id<102
-				end transaction(commmit/rollback)
-				disconnect oracle
+  Description : let oci-api to c++ base package, exe curd demo
   ============================================================================
 */
 /**
@@ -43,24 +39,14 @@ ORCL =
 
 using namespace std;
 
-#define WUJDEBUG printf
-
-void printOCIErr(dvoid *errhp, const char *funcName, int rc){
-	char errbuf[100]; //存储错误信息
-	int	errcode; //错误号
-	OCIErrorGet((dvoid *)errhp, (ub4)1, (text *)NULL, &errcode, (OraText*)errbuf, (ub4)sizeof(errbuf), OCI_HTYPE_ERROR);
-	WUJDEBUG("函数%s 返回值：%d: 错误号: %d, 错误信息: %s\n", funcName, rc, errcode, errbuf);
-}
-
 int main()
 {
 	int		p_x;//employee_id = p_x
 	int		p_id;
-	const char *p_name = "wuj";
+	const char *p_name = "wuj";//用于绑定SQL语句中的占位符
 	const char *p_marry = "marry";
-	char	*res_name;//存储SQL查询语句后的结果
+	char	*res_name;//用于存储SQL查询语句后的结果
 	int		*res_id;
-	int 	rc;	//接收OCI-api返回值
 	char	mysql_select[100];//储存SQL语句
 	char	mysql_insert[100];
 	char	mysql_delete[100];
@@ -72,19 +58,19 @@ int main()
 	res_name = (char *)malloc(20);
 	memset(res_name, 0, 20);
 
-	NstvConnection *conn1 = new NstvConnection();
+	NstvConnection *conn1 = new NstvConnection();//select连接
 	conn1->connect("orcl", "dbuser1", "1");
 	if (!conn1->isConnected()) cout<<"连接数据库失败"<<endl;
 	
-	NstvConnection *conn2 = new NstvConnection();
+	NstvConnection *conn2 = new NstvConnection();//insert连接
 	conn2->connect("orcl", "dbuser1", "1");
 	if (!conn2->isConnected()) cout<<"连接数据库失败"<<endl;
 	
-	NstvConnection *conn3 = new NstvConnection();
+	NstvConnection *conn3 = new NstvConnection();//delete连接
 	conn3->connect("orcl", "dbuser1", "1");
 	if (!conn3->isConnected()) cout<<"连接数据库失败"<<endl;
 	
-	NstvConnection *conn4 = new NstvConnection();
+	NstvConnection *conn4 = new NstvConnection();//update连接
 	conn4->connect("orcl", "dbuser1", "1");
 	if (!conn4->isConnected()) cout<<"连接数据库失败"<<endl;
 
@@ -126,32 +112,23 @@ int main()
 	/*准备语句执行结果缓冲区*/
 	sql1->prepareResultInt(1, res_id);
 	sql1->prepareResultStr(2, res_name, 20);
-	
-	
-	
+
 	/*执行SQL语句*/
 #if 1
-	sql2->handleTrans();
+	sql2->handleTrans();//insert
 	cout<<1<<endl;
 #endif
 #if 0
-	sql3->handleTrans();
+	sql3->handleTrans();//delete
 #endif
-	sql4->handleTrans();
-	sql1->handleTrans();
+	sql4->handleTrans();//update
+	sql1->handleTrans();//select
 
-		
 	/*打印结果*/
-	while (rc != OCI_NO_DATA)
+	while(sql1->nextResults())
 	{         
-		WUJDEBUG("%d, %s\n", *res_id, res_name);
-		rc = OCIStmtFetch2(sql1->stmthp, conn1->errhp, 1, OCI_FETCH_NEXT, 1, OCI_DEFAULT);
-		if(rc != 100 && rc !=0)
-		{
-			printOCIErr(conn1->errhp, "OCIStmtFetch2", rc);
-		}
+		printf("%d, %s\n", *res_id, res_name);
 	}
-	rc = 0;
 
 OCIErr:
 	conn1->disconnect();

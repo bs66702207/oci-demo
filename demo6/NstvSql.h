@@ -20,6 +20,7 @@ public:
 	void getSqlType();
 	bool execute(int times);
 	bool handleTrans();
+	bool nextResults();
 public:
 	NstvConnection* 	conn;		//连接
 	OCIStmt*			stmthp;		//语句句柄
