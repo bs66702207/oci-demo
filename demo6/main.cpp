@@ -1,6 +1,6 @@
 /*	
   ============================================================================
-  Name        : demo2.cpp
+  Name        : main.cpp
   Author      : wuj 
   Version     : the second demo for oci programme
   Copyright   : nstv
