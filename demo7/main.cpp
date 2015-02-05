@@ -28,6 +28,7 @@ ORCL =
 #include "NstvException.h"
 #include "NstvConnection.h"
 #include "NstvSql.h"
+#include "NstvConnPool.h"
 
 using namespace std;
 
@@ -50,19 +51,21 @@ int main()
 	res_name = (char *)malloc(20);
 	memset(res_name, 0, 20);
 
-	NstvConnection *conn1 = new NstvConnection();//select连接
+	NstvConnPool* pool = NstvConnPool::createPool();
+	
+	NstvConnection *conn1 = pool->getConn();//select
 	conn1->connect("orcl", "dbuser1", "1");
 	if (!conn1->isConnected()) cout<<"连接数据库失败"<<endl;
 	
-	NstvConnection *conn2 = new NstvConnection();//insert连接
+	NstvConnection *conn2 = pool->getConn();//insert
 	conn2->connect("orcl", "dbuser1", "1");
 	if (!conn2->isConnected()) cout<<"连接数据库失败"<<endl;
 	
-	NstvConnection *conn3 = new NstvConnection();//delete连接
+	NstvConnection *conn3 = pool->getConn();//delete
 	conn3->connect("orcl", "dbuser1", "1");
 	if (!conn3->isConnected()) cout<<"连接数据库失败"<<endl;
 	
-	NstvConnection *conn4 = new NstvConnection();//update连接
+	NstvConnection *conn4 = pool->getConn();//update
 	conn4->connect("orcl", "dbuser1", "1");
 	if (!conn4->isConnected()) cout<<"连接数据库失败"<<endl;
 
@@ -106,19 +109,17 @@ int main()
 	sql1->prepareResultStr(2, res_name, 20);
 
 	/*执行SQL语句*/
-#if 0
+#if 1
 	sql2->handleTrans();//insert
-	cout<<1<<endl;
 #endif
-#if 0
+#if 1
 	sql3->handleTrans();//delete
 #endif
 	sql4->handleTrans();//update
 	sql1->handleTrans();//select
 
 	/*打印结果*/
-	do
-	{         
+	do{         
 		printf("%d, %s\n", *res_id, res_name);
 	}while(sql1->nextResults());
 

@@ -1,0 +1,1 @@
+#pragma once#include <oci.h>using namespace std;class NstvException{public:	NstvException(){}	//检查status状态下的错误	static bool checkErr(OCIError *pErr, sb4 status);	//获取错误码	static int errCode() { return err; }	static char* errMsg() { return (char*)msg; }private:	static int err;	static char msg[512];};
