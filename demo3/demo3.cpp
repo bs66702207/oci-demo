@@ -408,11 +408,11 @@ OCIErr:
 		p_stmt1 = NULL;
 	}
 	if(p_stmt2 != NULL){
-		rc = OCIHandleFree((dvoid *)p_stmt1, OCI_HTYPE_STMT);
+		rc = OCIHandleFree((dvoid *)p_stmt2, OCI_HTYPE_STMT);
 		p_stmt2 = NULL;
 	}
 	if(p_stmt3 != NULL){
-		rc = OCIHandleFree((dvoid *)p_stmt1, OCI_HTYPE_STMT);
+		rc = OCIHandleFree((dvoid *)p_stmt3, OCI_HTYPE_STMT);
 		p_stmt3 = NULL;
 	}
 	if(p_dfn1 != NULL){
@@ -428,12 +428,12 @@ OCIErr:
 		p_bnd1 = NULL;
 	}
 	if(p_bnd2 != NULL){
-		rc = OCIHandleFree((dvoid *)p_bnd1, OCI_HTYPE_BIND); 
-		p_bnd1 = NULL;
+		rc = OCIHandleFree((dvoid *)p_bnd2, OCI_HTYPE_BIND); 
+		p_bnd2 = NULL;
 	}
 	if(p_bnd3 != NULL){
-		rc = OCIHandleFree((dvoid *)p_bnd1, OCI_HTYPE_BIND); 
-		p_bnd1 = NULL;
+		rc = OCIHandleFree((dvoid *)p_bnd3, OCI_HTYPE_BIND); 
+		p_bnd3 = NULL;
 	}
 	
 	free(res_id);
