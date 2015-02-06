@@ -2,9 +2,9 @@
   ============================================================================
   Name        : main.cpp
   Author      : wuj 
-  Version     : the second demo for oci programme
+  Version     : the 7th demo for oci programme
   Copyright   : nstv
-  Description : let oci-api to c++ base package, exe curd demo
+  Description : let oci-api to c++ base package, exe curd demo, support int and str type
   ============================================================================
 */
 /**
